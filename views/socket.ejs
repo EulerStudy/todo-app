@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Todo App</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script refer src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js" integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+  <%- include('nav.html') %>
+
+  <h4 class="m-5 text-center">채팅방</h4>
+  <div id="content"></div>
+  <input id="input1">
+  <button id="send">서버에 메시지 보내기</button>
+  <button id="room1">채팅방1 입장</button>
+  <button id="room1-send">채팅방1에서 메시지보내기</button>
+
+  <script>
+    let socket = io()
+    $('#send').click(function() {
+      console.log('click')
+      socket.emit('user-send', $('#input1').val())
+    })
+
+    socket.on('broadcast', function(data) {
+      console.log(data)
+      $('#content').append('<div>' + data + '</div>')
+    })
+
+    $('#room1').click(function() {
+      socket.emit('joinroom', '채팅방입장시켜줘')
+    })
+    
+    $('#room1-send').click(function() {
+      socket.emit('room1-send', '반가워 채팅방1 사람들아')
+    })
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  </body>
+</html>
